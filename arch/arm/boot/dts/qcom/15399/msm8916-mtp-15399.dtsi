@@ -161,6 +161,7 @@
 			/delete-property/ ak,layout;
 			ak,layout = <0x1>;
 			ak,auto-report;
+                        status = "ok";
 		};
 
 		yamaha@2e {
