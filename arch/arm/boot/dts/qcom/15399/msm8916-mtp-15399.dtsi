@@ -145,6 +145,7 @@
 			kionix,g-range = <2>;
 			kionix,negate-x;
 			kionix,res-12bit;
+                        status = "ok";
 		};
 
 		akm@c {
