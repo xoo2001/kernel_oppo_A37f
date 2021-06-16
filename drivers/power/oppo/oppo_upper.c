@@ -99,6 +99,17 @@ static void opchg_external_power_changed(struct power_supply *psy)
 	}
 
     opchg_set_enable_volatile_writes(chip);
+        #ifdef VENDOR_EDIT
+	/*MoFei@EXP.BaseDrv.charge,2016/05/07 modify for avoiding current change frequently when lcd is always on  */
+	if(chip->is_lcd_on == true){
+        if(is_project(OPPO_15399))
+		opchg_config_input_chg_current(chip, INPUT_CURRENT_LCD, LCD_ON_CHARGING_INPUT_CURRENT_15399);
+	}
+	else{
+		if(is_project(OPPO_15399))
+		opchg_config_input_chg_current(chip, INPUT_CURRENT_LCD, LCD_OFF_CHARGING_INPUT_CURRENT_15399);
+	}
+	#endif /*VENDOR_EDIT*/
 	opchg_config_input_chg_current(chip, INPUT_CURRENT_LCD, chip->limit_current_max_ma);
 	opchg_config_input_chg_current(chip, INPUT_CURRENT_CAMERA, chip->limit_current_max_ma);
     opchg_config_input_chg_current(chip, INPUT_CURRENT_BY_POWER, current_limit);
@@ -424,7 +435,10 @@ int opchg_battery_get_property(struct power_supply *psy,
 
     switch (prop) {
 		case POWER_SUPPLY_PROP_AUTHENTICATE:
-			val->intval = 1;
+			if(is_project(OPPO_15399))
+				val->intval = chip->batt_authen;
+			else
+				val->intval = 1;
 			break;
 		case POWER_SUPPLY_PROP_PRESENT:
 			val->intval = chip->bat_exist;
